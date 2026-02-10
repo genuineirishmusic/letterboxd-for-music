@@ -52,6 +52,10 @@ npm run dev
   - [ ] Email/password sign-in works on `/login`.
   - [ ] Edit profile on `/settings`, ensure handle uniqueness.
   - [ ] Public profile at `/u/[handle]` loads.
+- **Search + Discovery pages**
+  - [ ] `/search` returns albums, artists, and tracks with filter toggle (Spotify if configured, else MusicBrainz).
+  - [ ] Clicking an album creates/updates a `music_items` row.
+  - [ ] Artist and track pages load live metadata and link to album logging.
 - **Search + Album page**
   - [ ] `/search` returns albums (Spotify if configured, else MusicBrainz).
   - [ ] Clicking an album creates/updates a `music_items` row.
@@ -69,6 +73,17 @@ npm run dev
 - **Monetization foundations (no UI)**
   - [ ] External links and official content tables exist.
   - [ ] Reserved layout slots appear only on Search and List pages.
+
+
+## Testing auth locally
+1. In Supabase dashboard, enable **Email** provider under Authentication > Providers.
+2. In Authentication > URL Configuration, set Site URL to `http://localhost:3000`.
+3. Start the app with `npm run dev`.
+4. Open `/login` and create an account with email + password.
+   - If confirmation is enabled, you should see: **"Check your email to confirm"**.
+5. Sign in from `/login` after confirmation.
+6. Verify header switches to **Sign out** when authenticated and **Sign in** when signed out.
+7. Verify a matching `profiles` row exists for the user (`id = auth user id`) with a generated unique `handle`.
 
 ## SQL migrations
 - `supabase/migrations/0001_init.sql`

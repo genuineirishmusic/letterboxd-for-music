@@ -1,6 +1,11 @@
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/server';
+import { SignOutButton } from '@/components/SignOutButton';
 
-export const Header = () => {
+export const Header = async () => {
+  const supabase = createClient();
+  const { data } = await supabase.auth.getUser();
+
   return (
     <header className="border-b border-ink-800/10 bg-white/70 backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
@@ -18,9 +23,13 @@ export const Header = () => {
             Settings
           </Link>
         </nav>
-        <Link href="/login" className="button-secondary">
-          Sign in
-        </Link>
+        {data.user ? (
+          <SignOutButton />
+        ) : (
+          <Link href="/login" className="button-secondary">
+            Sign in
+          </Link>
+        )}
       </div>
     </header>
   );
