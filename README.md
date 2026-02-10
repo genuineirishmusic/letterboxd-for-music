@@ -56,6 +56,10 @@ npm run dev
   - [ ] `/search` returns albums, artists, and tracks with filter toggle (Spotify if configured, else MusicBrainz).
   - [ ] Clicking an album creates/updates a `music_items` row.
   - [ ] Artist and track pages load live metadata and link to album logging.
+- **Search + Album page**
+  - [ ] `/search` returns albums (Spotify if configured, else MusicBrainz).
+  - [ ] Clicking an album creates/updates a `music_items` row.
+  - [ ] Album page shows cover, title, artist, year, and logs.
 - **Listen logs (moment-first)**
   - [ ] Log form on album page saves context tags + optional rating + optional review.
   - [ ] Relistens are allowed (multiple logs per album).

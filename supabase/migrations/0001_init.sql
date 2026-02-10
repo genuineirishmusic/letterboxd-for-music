@@ -137,17 +137,6 @@ create policy "Follows can be removed by follower" on follows
 create policy "Music items are viewable by everyone" on music_items
   for select using (true);
 
-create policy "Music items insertable by authenticated"
-on music_items
-for insert
-with check (auth.role() = 'authenticated');
-
-create policy "Music items updatable by authenticated"
-on music_items
-for update
-using (auth.role() = 'authenticated')
-with check (auth.role() = 'authenticated');
-
 create policy "Logs readable by visibility" on logs
   for select using (
     visibility = 'public'
