@@ -1,35 +1,21 @@
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
-import { SignOutButton } from '@/components/SignOutButton';
 
-export const Header = async () => {
-  const supabase = createClient();
-  const { data } = await supabase.auth.getUser();
-
+export const Header = () => {
   return (
-    <header className="border-b border-ink-800/10 bg-white/70 backdrop-blur">
+    <header className="border-b border-ink-800/10 bg-white/80 backdrop-blur">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="text-lg font-semibold text-ink-900">
-          Moment
+          Genuine Clip Finder
         </Link>
-        <nav className="flex items-center gap-6 text-sm text-ink-600">
-          <Link href="/search" className="hover:text-ink-900">
-            Search
-          </Link>
-          <Link href="/" className="hover:text-ink-900">
-            Feed
-          </Link>
-          <Link href="/settings" className="hover:text-ink-900">
-            Settings
-          </Link>
+        <nav className="hidden items-center gap-6 text-sm text-ink-600 md:flex">
+          <a href="#rules" className="hover:text-ink-900">
+            Rules
+          </a>
+          <a href="#workflow" className="hover:text-ink-900">
+            Workflow
+          </a>
         </nav>
-        {data.user ? (
-          <SignOutButton />
-        ) : (
-          <Link href="/login" className="button-secondary">
-            Sign in
-          </Link>
-        )}
+        <span className="tag">No scraping · No auto-posting</span>
       </div>
     </header>
   );

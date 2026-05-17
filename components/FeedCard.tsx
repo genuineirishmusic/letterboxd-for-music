@@ -10,25 +10,44 @@ type FeedCardProps = {
     listened_at: string;
     rating: number | null;
     review_text: string | null;
-    visibility: string;
-    profiles: {
-      handle: string;
-      display_name: string | null;
-      avatar_url: string | null;
-    } | null;
-    music_items: {
-      id: string;
-      title: string;
-      artist: string;
-      year: number | null;
-      image_url: string | null;
-    } | null;
+    visibility?: string;
+    profiles:
+      | {
+          handle: string;
+          display_name: string | null;
+          avatar_url: string | null;
+        }
+      | {
+          handle: string;
+          display_name: string | null;
+          avatar_url: string | null;
+        }[]
+      | null;
+    music_items:
+      | {
+          id: string;
+          title: string;
+          artist: string;
+          year: number | null;
+          image_url: string | null;
+        }
+      | {
+          id: string;
+          title: string;
+          artist: string;
+          year: number | null;
+          image_url: string | null;
+        }[]
+      | null;
     log_tags?: Tag[];
   };
   tone?: 'default' | 'muted';
 };
 
 export const FeedCard = ({ log, tone = 'default' }: FeedCardProps) => {
+  const profile = Array.isArray(log.profiles) ? log.profiles[0] : log.profiles;
+  const musicItem = Array.isArray(log.music_items) ? log.music_items[0] : log.music_items;
+
   return (
     <article
       className={clsx(
@@ -37,10 +56,10 @@ export const FeedCard = ({ log, tone = 'default' }: FeedCardProps) => {
       )}
     >
       <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-ink-800/10">
-        {log.music_items?.image_url ? (
+        {musicItem?.image_url ? (
           <Image
-            src={log.music_items.image_url}
-            alt={log.music_items.title}
+            src={musicItem.image_url}
+            alt={musicItem.title}
             fill
             className="object-cover"
           />
@@ -49,8 +68,8 @@ export const FeedCard = ({ log, tone = 'default' }: FeedCardProps) => {
       <div className="flex-1 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm text-ink-500">
-            <Link href={`/u/${log.profiles?.handle ?? ''}`} className="font-semibold text-ink-900">
-              {log.profiles?.display_name ?? log.profiles?.handle ?? 'Unknown'}
+            <Link href={`/u/${profile?.handle ?? ''}`} className="font-semibold text-ink-900">
+              {profile?.display_name ?? profile?.handle ?? 'Unknown'}
             </Link>{' '}
             listened{' '}
             <span className="text-ink-600">
@@ -64,11 +83,11 @@ export const FeedCard = ({ log, tone = 'default' }: FeedCardProps) => {
           ) : null}
         </div>
         <div>
-          <Link href={`/album/${log.music_items?.id ?? ''}`} className="text-lg font-semibold">
-            {log.music_items?.title}
+          <Link href={`/album/${musicItem?.id ?? ''}`} className="text-lg font-semibold">
+            {musicItem?.title}
           </Link>
           <p className="text-sm text-ink-500">
-            {log.music_items?.artist} {log.music_items?.year ? `· ${log.music_items.year}` : ''}
+            {musicItem?.artist} {musicItem?.year ? `· ${musicItem.year}` : ''}
           </p>
         </div>
         {log.log_tags?.length ? (

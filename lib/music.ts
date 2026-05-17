@@ -87,3 +87,73 @@ export const searchAlbums = async (query: string): Promise<AlbumResult[]> => {
   if (spotifyResults.length > 0) return spotifyResults;
   return searchMusicBrainz(query);
 };
+
+export type LinkedAlbum = Omit<AlbumResult, 'image_url'> & {
+  id: string;
+  subtitle: string;
+  image_url: string;
+};
+
+export type ArtistDetails = {
+  name: string;
+  subtitle: string | null;
+  image_url: string;
+  albums: LinkedAlbum[];
+};
+
+export type TrackDetails = {
+  name: string;
+  artist: string;
+  image_url: string;
+  album: LinkedAlbum | null;
+};
+
+const placeholderImage = 'https://placehold.co/300x300/png?text=Music';
+
+export const getArtistDetails = async (
+  source: 'spotify' | 'musicbrainz',
+  sourceId: string
+): Promise<ArtistDetails | null> => {
+  return {
+    name: sourceId,
+    subtitle: `Imported from ${source}`,
+    image_url: placeholderImage,
+    albums: []
+  };
+};
+
+export const getTrackDetails = async (
+  source: 'spotify' | 'musicbrainz',
+  sourceId: string
+): Promise<TrackDetails | null> => {
+  return {
+    name: sourceId,
+    artist: `Imported from ${source}`,
+    image_url: placeholderImage,
+    album: null
+  };
+};
+
+export const upsertAlbumToMusicItems = async (album: LinkedAlbum | AlbumResult) => {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return null;
+  }
+
+  const { createAdminClient } = await import('@/lib/supabase/admin');
+  const supabase = createAdminClient();
+  const { data } = await supabase
+    .from('music_items')
+    .upsert(
+      {
+        title: album.title,
+        artist: album.artist,
+        year: album.year,
+        image_url: album.image_url
+      },
+      { onConflict: 'title,artist' }
+    )
+    .select('id')
+    .single();
+
+  return data?.id ?? null;
+};

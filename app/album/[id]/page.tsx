@@ -93,7 +93,7 @@ export default async function AlbumPage({ params }: { params: { id: string } }) 
           <h2 className="section-title">Community moments</h2>
           <div className="space-y-4">
             {(logs ?? []).length ? (
-              (logs ?? []).map((log) => <FeedCard key={log.id} log={log} tone="muted" />)
+              (logs ?? []).map((log: any) => <FeedCard key={log.id} log={log} tone="muted" />)
             ) : (
               <div className="card p-6 text-sm text-ink-500">Be the first to log a listen.</div>
             )}

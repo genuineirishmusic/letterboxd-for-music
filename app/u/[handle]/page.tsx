@@ -88,7 +88,7 @@ export default async function ProfilePage({ params }: { params: { handle: string
         <h2 className="section-title">Recent listens</h2>
         <div className="space-y-4">
           {(logs ?? []).length ? (
-            (logs ?? []).map((log) => <FeedCard key={log.id} log={log} />)
+            (logs ?? []).map((log: any) => <FeedCard key={log.id} log={log} />)
           ) : (
             <div className="card p-5 text-sm text-ink-500">No listens yet.</div>
           )}
